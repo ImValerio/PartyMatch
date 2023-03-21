@@ -20,7 +20,7 @@ app.use(express.json());
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  socket.on("join-party", joinParty)
+  socket.on("join-party", (partyId)=> joinParty(partyId,socket))
 });
 
 
