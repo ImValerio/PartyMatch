@@ -4,26 +4,23 @@ import {socket} from "../../socket"
 
 const Index = () => {
     const router = useRouter()
-    const [users, setUsers] = useState([])
+    const {partyId} = router.query
+    const [users, setUsers] = useState(null)
 
     useEffect(()=>{
-        const connectToSocketServer = ()=>{
+        if(partyId){
             socket.connect();
-            socket.emit("join-party",router.query.partyId)
+            socket.emit("join-party",partyId)
+            socket.on("updateUsers", (users) => {console.log(users);setUsers(users);});
         }
-        const socketOn = ()=>{
-            socket.on("updateUsers", (users) => setUsers(users));
-        }  
-        socketOn();
-        connectToSocketServer();
-    },[])
+   },[partyId])
 
     return (
         <div>
-            <h1>{router.query.partyId}</h1>
+            <h1>{partyId}</h1>
 
             <ul>
-                {users.map((user:Map<string,any>,i)=> <li>Tavolo{i+1} [{user.get("score")}]</li>)}
+                {users && users.map((user:object,i)=> <li>Tavolo{i+1} [{user.score}]</li>)}
             </ul>
         </div>
     )

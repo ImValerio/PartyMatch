@@ -1,15 +1,16 @@
 const {redisClient:client} = require("../db/database");
 
-const joinParty = async (partyId, socket)=>{
-   console.log("PARTY-ID:", partyId);
-   const users = client.get(partyId) ? client.get(partyId) : new Set();
-   
-   const user = new Map();
-   user.set("score", 0);
+const joinParty = async (partyId)=>{
+   try{
+      let users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : [];
 
-   users.add(user);
-   client.set(partyId, users);
-   
-   socket.emit("updateUsers", users)
+      users = [...users,{score: 0}];
+      await client.set(partyId, JSON.stringify(users));
+      console.log("Users:",users) 
+
+      return users;
+   }catch(error){
+      console.log(error)
+   }
 }
 module.exports = {joinParty}

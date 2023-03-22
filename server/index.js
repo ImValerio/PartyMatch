@@ -19,8 +19,15 @@ app.use(helmet());
 app.use(express.json());
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on("join-party", (partyId)=> joinParty(partyId,socket))
+  console.log('a user connected',socket.id);
+  socket.on("join-party", async (partyId)=> {
+    if(partyId){
+      socket.join(partyId)
+      const users = await joinParty(partyId);
+      console.log("Sending:",users)
+      io.to(partyId).emit("updateUsers", users);
+    }
+ })
 });
 
 
