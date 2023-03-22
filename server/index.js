@@ -23,9 +23,12 @@ io.on('connection', (socket) => {
   socket.on("join-party", async (partyId)=> {
     if(partyId){
       socket.join(partyId)
-      const users = await joinParty(partyId);
+      const users = await joinParty(partyId,socket);
       console.log("Sending:",users)
+
+      io.to(socket.id).emit("initUser", users[users.length -1]);
       io.to(partyId).emit("updateUsers", users);
+
     }
  })
 });
