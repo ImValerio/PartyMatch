@@ -7,6 +7,7 @@ const joinParty = async (partyId, socket)=>{
 
       const user = {
          id:uuidv4(),
+         displayName: `Tavolo ${users.length}`,
          score: 0
       }
       users = [...users, user];
