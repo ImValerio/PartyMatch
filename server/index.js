@@ -31,6 +31,9 @@ io.on('connection', (socket) => {
 
     }
  })
+ socket.on("hiTo", (socketId)=>{
+  io.to(socketId).emit("recivedHi",socket.id);
+ })
 });
 
 
