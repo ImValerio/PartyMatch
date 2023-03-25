@@ -1,4 +1,4 @@
-const {redisClient:client} = require("../db/database");
+const {redisClient:client} = require("../db/connection");
 const { v4: uuidv4 } = require('uuid');
 
 const joinParty = async (partyId, socket)=>{

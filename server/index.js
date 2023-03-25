@@ -5,12 +5,12 @@ const { Server } = require("socket.io");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
-const {connectToDb} = require("./db/database")
+const {connectToDb} = require("./db/connection")
 const {joinParty} = require("./controller/socketController");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {cors:"http://localhost:3000"});
+const io = new Server(server, {cors: process.env.SOCKET_SERVER || "http://localhost:3000"});
 
 connectToDb();
 
@@ -31,8 +31,8 @@ io.on('connection', (socket) => {
 
     }
  })
- socket.on("hiTo", (socketId)=>{
-  io.to(socketId).emit("recivedHi",socket.id);
+ socket.on("hiTo", ({socketId, user})=>{
+  io.to(socketId).emit("recivedHi", user);
  })
 });
 
