@@ -9,8 +9,7 @@ const Index = () => {
     const router = useRouter()
     const {partyId} = router.query
     const [users, setUsers] = useState([]);
-    const [myUser, setMyUser] = useState();
-    const [message, setMessage] = useState("");
+    const [myUser, setMyUser] = useState<User>();
     const [isChatting, setIsChatting] = useState<User>();
 
 
@@ -29,10 +28,6 @@ const Index = () => {
 
     const sendMessage = (socketId:string)=>{
         socket.emit("messageTo",{socketId,message})
-    }
-
-    const openChat = (user:User)=>{
-        setIsChatting(user);
     }
     
     useEffect(()=>{
@@ -63,7 +58,7 @@ const Index = () => {
    }
 
    if(isChatting){
-    return <Chat user={isChatting} myUser={myUser}/>
+    return <Chat user={isChatting}  sendMessage={sendMessage} setIsChatting={setIsChatting}/>
    }
 
     return (
@@ -72,17 +67,10 @@ const Index = () => {
             <ul>
                 {users && users.map((user:User,i:number)=>{
                  if(user.id !== myUser.id)
-                    return <Table user={user} sayHi={sayHi} openChat={openChat} />
+                    return <Table user={user} sayHi={sayHi} setIsChatting={setIsChatting}/>
                 })}
             </ul>
 
-            <div>
-                <input type="text" placeholder='Message...' value={message} onChange={(e)=> setMessage(e.target.value)}/>
-                <select>
-                    {users.map(user => <option value={user.socketId}>{user.displayName}</option>)}
-                </select>
-                <button onClick={sendMessage}>SEND</button>
-            </div>
         </div>
     )
 }

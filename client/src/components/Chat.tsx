@@ -1,7 +1,15 @@
 import {useState, useEffect} from 'react';
 import {socket} from "../socket";
+import User from '@/interfaces/User';
 
-const Chat = ({myUser,user}) => {
+interface Props{
+    user: User,
+    sendMessage:void,
+    setIsChatting: void,
+}
+
+const Chat = (props:Props) => {
+    const {user, sendMessage, setIsChatting} = props
     const [message,setMessage] = useState("")
 
     useEffect(()=>{
@@ -11,6 +19,8 @@ const Chat = ({myUser,user}) => {
         <div>
             <h1>Chat with {user.displayName}</h1>
             <input type="text" placeholder='Message...' value={message} onChange={(e)=> setMessage(e.target.value)}/>
+            <button onClick={()=>sendMessage(user)}>SEND</button>
+            <button onClick={()=>setIsChatting(false)}>BACK</button>
         </div>
     )
 }
