@@ -3,8 +3,8 @@ import {socket} from "../socket";
 
 interface Props{
     user: User,
-    sayHi:void,
-    setIsChatting: void,
+    sayHi:(socketId:string)=> void,
+    setIsChatting: (user:User)=> void,
 }
 
 const Table = (props:Props) => {

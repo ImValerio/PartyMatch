@@ -4,8 +4,8 @@ import User from '@/interfaces/User';
 
 interface Props{
     user: User,
-    sendMessage:void,
-    setIsChatting: void,
+    sendMessage:(user:User)=>void,
+    setIsChatting: (state:boolean) => void,
 }
 
 const Chat = (props:Props) => {
