@@ -5,8 +5,8 @@ const { Server } = require("socket.io");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
-const {connectToDb} = require("./db/connection")
-const {joinParty} = require("./controller/socketController");
+const {connectToDb, redisClient} = require("./db/connection")
+const {joinParty, removeSocketFromUser} = require("./controller/socketController");
 
 const app = express();
 const server = http.createServer(app);
@@ -19,12 +19,16 @@ app.use(helmet());
 app.use(express.json());
 
 io.on('connection', (socket) => {
-  console.log('a user connected',socket.id);
-  socket.on("join-party", async (partyId)=> {
+  socket.on("disconnect", async (userId)=>{
+    await removeSocketFromUser(userId, socket.id);
+    console.log(`[info] ${socket.id} disconnected`)
+  })
+  console.log(`[info] ${socket.id} connected`);
+  
+  socket.on("join-party", async ({partyId, userId})=> {
     if(partyId){
       socket.join(partyId)
-      const users = await joinParty(partyId,socket);
-      console.log("Sending:",users)
+      const users = await joinParty(partyId, socket, userId);
 
       io.to(socket.id).emit("initUser", users[users.length -1]);
       io.to(partyId).emit("updateUsers", users);
