@@ -23,7 +23,7 @@ const joinParty = async (partyId, socket, userId)=>{
       else{
          users.map((user)=>{
             if(user.id == userId){
-               user.scokedIds = [...user.sockedIds,socket.id]
+               user.socketIds = [...user.socketIds,socket.id]
             }
             return user;
          }) 
@@ -47,7 +47,7 @@ const removeSocketFromUser = async (partyId, userId, socketId) => {
    
    users = users.map((user) =>{
       if(user.id == userId){
-         user.socketIds = user.sockedIds.filter(id => id != socketId);
+         user.socketIds = user.socketIds.filter(id => id != socketId);
       }
 
       return user;
@@ -60,8 +60,9 @@ const getSocketIds = async (partyId,userId)=>{
 
    const users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : null;
 
-   const {sockedIds} = users.find(user => user.id == userId);
-   return sockedIds;
+   if(!users) return []
+   const {socketIds} = users.find(user => user.id == userId);
+   return socketIds ? socketIds : [];
 
 }
-module.exports = {joinParty, removeSocketFromUser}
+module.exports = {joinParty, removeSocketFromUser, getSocketIds}
