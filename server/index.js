@@ -6,7 +6,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 
 const {connectToDb, redisClient} = require("./db/connection")
-const {joinParty, removeSocketFromUser} = require("./controller/socketController");
+const {joinParty, removeSocketFromUser, getSocketIds} = require("./controller/socketController");
 
 const app = express();
 const server = http.createServer(app);
@@ -35,8 +35,11 @@ io.on('connection', (socket) => {
 
     }
  })
- socket.on("hiTo", ({socketId, user})=>{
-  io.to(socketId).emit("recivedHi", user);
+ socket.on("hiTo", async ({partyId, userId, user})=>{
+  const socketIds = await getSocketIds(partyId,userId);
+  for (const socketId in socketIds) {
+    io.to(socketId).emit("recivedHi", user);
+  }
  })
 });
 

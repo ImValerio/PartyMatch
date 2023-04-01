@@ -55,4 +55,13 @@ const removeSocketFromUser = async (partyId, userId, socketId) => {
 
    await client.set(partyId, JSON.stringify(users));
 }
+
+const getSocketIds = async (partyId,userId)=>{
+
+   const users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : null;
+
+   const {sockedIds} = users.find(user => user.id == userId);
+   return sockedIds;
+
+}
 module.exports = {joinParty, removeSocketFromUser}
