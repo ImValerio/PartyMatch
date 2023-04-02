@@ -14,9 +14,11 @@ const Table = (props:Props) => {
   return (
     <div className='user-table'>
       {user.displayName}
-      <button onClick={()=> sayHi(user.id)} title={user.id}>Say hi!</button>
-      <button onClick={()=> setIsChatting(user)}>CHAT</button>
-    </div>
+      <div>
+        <button onClick={()=> sayHi(user.id)} title={user.id}>Say hi!</button>
+        <button onClick={()=> setIsChatting(user)}>CHAT</button>
+      </div>
+   </div>
   )
 }
 

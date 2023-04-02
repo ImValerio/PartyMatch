@@ -62,9 +62,9 @@ const Index = () => {
    }
 
     return (
-        <div>
+        <div className='container'>
             <h1>{partyId} - {myUser.displayName}</h1>
-            <ul>
+            <ul className='users-container'>
                 {users && users.map((user:User,i:number)=>{
                  if(user.id !== myUser.id)
                     return <Table user={user} sayHi={sayHi} setIsChatting={setIsChatting}/>

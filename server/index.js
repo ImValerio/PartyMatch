@@ -38,7 +38,6 @@ io.on('connection', (socket) => {
  socket.on("hiTo", async ({partyId, userId, user})=>{
   const socketIds = await getSocketIds(partyId,userId);
   for (const socketId of socketIds) {
-    console.log(socketId)
     io.to(socketId).emit("recivedHi", user);
   }
  })
