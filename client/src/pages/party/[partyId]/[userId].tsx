@@ -49,6 +49,7 @@ const Index = () => {
         socket.on("updateUsers", (newUsers) => setUsers(newUsers));
 
         return ()=>{
+            socket.emit("remove-socket",{partyId,userId})
             socket.disconnect();
         }
    },[])

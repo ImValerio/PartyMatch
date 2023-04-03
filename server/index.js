@@ -18,18 +18,27 @@ app.use(morgan("tiny"));
 app.use(helmet());
 app.use(express.json());
 
+
+const userIdSocket = new Map()
+
 io.on('connection', (socket) => {
-  socket.on("disconnect", async (userId)=>{
-    await removeSocketFromUser(userId, socket.id);
-    console.log(`[info] ${socket.id} disconnected`)
-  })
+  socket.on("disconnect", async ()=>{
+    if(userIdSocket.has(socket.id)){
+      const {userId, partyId} = userIdSocket.get(socket.id) ;
+      if(userId && partyId)
+        await removeSocketFromUser(partyId,userId, socket.id);
+
+      userIdSocket.delete(socket.id);
+  
+    }
+ })
   console.log(`[info] ${socket.id} connected`);
   
   socket.on("join-party", async ({partyId, userId})=> {
     if(partyId){
       socket.join(partyId)
       const users = await joinParty(partyId, socket, userId);
-
+      userIdSocket.set(socket.id,{userId: users[users.length -1].id, partyId});
       io.to(socket.id).emit("initUser", users[users.length -1]);
       io.to(partyId).emit("updateUsers", users);
 

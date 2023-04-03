@@ -30,6 +30,7 @@ const joinParty = async (partyId, socket, userId)=>{
       }
 
       await client.set(partyId, JSON.stringify(users));
+      console.log(users)
       return users;
    }catch(error){
       console.log(error)
@@ -37,7 +38,7 @@ const joinParty = async (partyId, socket, userId)=>{
 }
 
 const removeSocketFromUser = async (partyId, userId, socketId) => {
-
+   
    let users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : null;
 
    if(!users){
