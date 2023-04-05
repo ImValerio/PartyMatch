@@ -1,10 +1,8 @@
-const {redisClient:client} = require("../db/connection");
-const { v4: uuidv4 } = require('uuid');
-
+const {updateParty, getUsers, setUsers} = require("./dbController");
 const joinParty = async (partyId, socket, userId)=>{
    try{
-      let users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : [];
-      
+      let users =  getUsers(partyId);     
+
       //TODO: use uuid for identify the user and collect all sockets in sockedIds propriety
 
       const defaultUser = {
@@ -29,7 +27,7 @@ const joinParty = async (partyId, socket, userId)=>{
          }) 
       }
 
-      await client.set(partyId, JSON.stringify(users));
+      await updateParty();
       console.log(users)
       return users;
    }catch(error){
@@ -39,8 +37,7 @@ const joinParty = async (partyId, socket, userId)=>{
 
 const removeSocketFromUser = async (partyId, userId, socketId) => {
    
-   let users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : null;
-
+   let users = await getUsers(partyId);
    if(!users){
       console.log("[error] party not found..");
       return;
@@ -54,16 +51,16 @@ const removeSocketFromUser = async (partyId, userId, socketId) => {
       return user;
    } )
 
-   await client.set(partyId, JSON.stringify(users));
+   await setUsers(partyId, users)
 }
 
 const getSocketIds = async (partyId,userId)=>{
 
-   const users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : null;
+   const users =  getUsers(partyId);
 
    if(!users) return []
    const {socketIds} = users.find(user => user.id == userId);
    return socketIds ? socketIds : [];
-
 }
+
 module.exports = {joinParty, removeSocketFromUser, getSocketIds}
