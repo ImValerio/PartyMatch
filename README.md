@@ -1,5 +1,5 @@
 # PartyMatch
-
+Web app that allows communcation between tables (in a pub, bar, etc.) in order to create an ideal social atmosphere.
 
 ## Run redis server
 
