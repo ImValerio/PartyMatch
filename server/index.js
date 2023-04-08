@@ -7,6 +7,7 @@ const morgan = require("morgan");
 
 const {connectToDb, redisClient} = require("./db/connection")
 const {joinParty, removeSocketFromUser, getSocketIds} = require("./controller/socketController");
+const {updateChat, createChat} = require("./controller/dbController")
 
 const app = express();
 const server = http.createServer(app);
@@ -35,7 +36,7 @@ io.on('connection', (socket) => {
   console.log(`[info] ${socket.id} connected`);
   
   socket.on("join-party", async ({partyId, userId})=> {
-    if(partyId){
+    if(partyId && userId){
       socket.join(partyId)
       const users = await joinParty(partyId, socket, userId);
       userIdSocket.set(socket.id,{userId: users[users.length -1].id, partyId});

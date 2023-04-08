@@ -12,10 +12,18 @@ interface Props{
 const Chat = (props:Props) => {
     const {myUser, user, partyId, setIsChatting} = props
     const [message,setMessage] = useState("")
+    const [chatMessages, setChatMessages] = useState([]);
 
     const chatId = [myUser.id, user.id].sort().join("-")
 
     useEffect(()=>{
+            socket.on("updateChat",(messages)=> setChatMessages(messages))
+
+            return()=>{
+                socket.off('recivedHi',()=>{})
+            }
+    },[chatMessages])
+        useEffect(()=>{
         socket.emit("joinChat",chatId);
     },[])
 
@@ -31,6 +39,12 @@ const Chat = (props:Props) => {
         return (
         <div>
             <h1>Chat with {user.displayName}</h1>
+            <div>
+                {chatMessages.map((chatMessage:any) => {
+
+                    return(<h1>{chatMessage.text} - {chatMessage.user}</h1>)
+                })}
+            </div>
             <input type="text" placeholder='Message...' value={message} onChange={(e)=> setMessage(e.target.value)}/>
             <button onClick={sendMessage}>SEND</button>
             <button onClick={()=>setIsChatting(false)}>BACK</button>

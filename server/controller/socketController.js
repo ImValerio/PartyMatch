@@ -1,9 +1,7 @@
 const {updateParty, getUsers, setUsers} = require("./dbController");
 const joinParty = async (partyId, socket, userId)=>{
    try{
-      let users =  getUsers(partyId);     
-
-      //TODO: use uuid for identify the user and collect all sockets in sockedIds propriety
+      let users =  await getUsers(partyId);     
 
       const defaultUser = {
          id: userId,
@@ -11,7 +9,7 @@ const joinParty = async (partyId, socket, userId)=>{
          displayName: `Tavolo ${users.length}`,
          score: 0
       }
-
+      console.log("USERS:",users)
       let user = users.find(user => user.id == userId);
 
       if (!user){
@@ -27,7 +25,7 @@ const joinParty = async (partyId, socket, userId)=>{
          }) 
       }
 
-      await updateParty();
+      await updateParty(partyId, users);
       console.log(users)
       return users;
    }catch(error){
@@ -56,9 +54,9 @@ const removeSocketFromUser = async (partyId, userId, socketId) => {
 
 const getSocketIds = async (partyId,userId)=>{
 
-   const users =  getUsers(partyId);
+   const users =  await getUsers(partyId);
 
-   if(!users) return []
+   if(!users || users.length < 1) return []
    const {socketIds} = users.find(user => user.id == userId);
    return socketIds ? socketIds : [];
 }

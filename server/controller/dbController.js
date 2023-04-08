@@ -5,7 +5,8 @@ const updateParty = async (partyId, users)=> {
 }
 
 const getUsers = async (partyId)=>{
-    await client.get(partyId) ? JSON.parse(await client.get(partyId)) : null;
+    const users = await client.get(partyId) ? JSON.parse(await client.get(partyId)) : [];
+    return users;
 }
 
 const setUsers = async (partyId,users)=>{
