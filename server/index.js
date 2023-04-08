@@ -50,7 +50,32 @@ io.on('connection', (socket) => {
     io.to(socketId).emit("recivedHi", user);
   }
  })
+
+ socket.on("joinChat", async (chatId)=> {
+
+  await createChat(chatId);
+  
+ })
+socket.on("messageTo", async ({chatId, partyId, msg})=> {
+
+  const messages = await updateChat(chatId, msg);
+
+  const userIdList = chatId.split("-");
+
+  for (const userId of userIdList){
+    await emitUpdatedMessages(userId, partyId, messages);
+  }
+  
+ })
 });
+
+const emitUpdatedMessages = async (userId, partyId, messages) => {
+  const sockedIds = await getSocketIds(userId, partyId);
+
+  for(const socketId of sockedIds){
+    io.to(socketId).emit("updateChat", messages)
+  }
+}
 
 
 const PORT = process.env.PORT || 5000;

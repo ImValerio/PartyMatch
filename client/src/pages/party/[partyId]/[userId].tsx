@@ -26,9 +26,7 @@ const Index = () => {
 
     }
 
-    const sendMessage = (socketId:string,message:string)=>{
-        socket.emit("messageTo",{socketId,message})
-    }
+    
     
     useEffect(()=>{
         socket.on("recivedHi",recivedHi)
@@ -59,7 +57,7 @@ const Index = () => {
    }
 
    if(isChatting){
-    return <Chat user={isChatting}  sendMessage={sendMessage} setIsChatting={setIsChatting}/>
+    return <Chat myUser={myUser} user={isChatting} partyId={partyId} setIsChatting={setIsChatting}/>
    }
 
     return (
