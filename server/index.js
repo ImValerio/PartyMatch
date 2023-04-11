@@ -5,7 +5,7 @@ const { Server } = require("socket.io");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
-const {connectToDb, redisClient} = require("./db/connection")
+const {connectToDb} = require("./db/connection")
 const {joinParty, removeSocketFromUser, getSocketIds} = require("./controller/socketController");
 const {updateChat, createChat} = require("./controller/dbController")
 
