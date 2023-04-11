@@ -34,12 +34,12 @@ const Chat = (props:Props) => {
             timestamp: new Date().getTime()
         }
         
-        socket.emit("messageTo",{chatId, partyId, msg});
+        socket.emit("messageTo",{chatId, msg});
     }
         return (
         <div>
             <h1>Chat with {user.displayName}</h1>
-            <div>
+            <div className='chat'>
                 {chatMessages.map((chatMessage:any) => {
 
                     return(<h1>{chatMessage.text} - {chatMessage.user}</h1>)

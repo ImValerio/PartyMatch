@@ -19,16 +19,18 @@ const createChat = async (chatId) => {
 }
 
 const updateChat = async (chatId,msg) => {
-    const messages = await client.get(chatId) ? JSON.parse(await client.get(chatId)) : null;
-
+    let messages = await client.get(chatId);
     if(!messages)
-        return;
+        messages = [];
+    messages = JSON.parse(messages);
+
+    console.log("GET",messages);
     
     messages.push(msg);
-
+    console.log("SET",messages)
     const updatedMessages = JSON.stringify(messages);
 
-    await client.set(chatId, JSON.stringify(updatedMessages))
+    await client.set(chatId, updatedMessages)
 
     return messages;
 }
