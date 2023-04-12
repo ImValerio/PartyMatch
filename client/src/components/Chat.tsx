@@ -25,6 +25,7 @@ const Chat = (props:Props) => {
     },[chatMessages])
         useEffect(()=>{
         socket.emit("joinChat",chatId);
+
     },[])
 
     const sendMessage = ()=>{
