@@ -36,6 +36,7 @@ const Chat = (props:Props) => {
         }
         
         socket.emit("messageTo",{chatId, msg});
+        setMessage("")
     }
         return (
         <div className='container'>
@@ -44,10 +45,12 @@ const Chat = (props:Props) => {
                 {chatMessages.map((chatMessage:any) => {
 
                     return(
-                        <div className={chatMessage.user == myUser.displayName ? 'messageContainer myMessage':'messageContainer'}>
-                            <h3 className='userMessage'>{chatMessage.user}</h3>
-                            <h2 className='textMessage'>{chatMessage.text}</h2>   
-                        </div>
+                        <div className={chatMessage.user == myUser.displayName? 'messageContainer myMessage' : 'messageContainer'}>
+                            <div className={chatMessage.user == myUser.displayName? 'message bg-green': 'message'}>
+                                <h3 className='userMessage'>{chatMessage.user}</h3>
+                                <h2 className='textMessage'>{chatMessage.text}</h2>   
+                            </div>
+                       </div>
                         )
                 })}
             </div>
