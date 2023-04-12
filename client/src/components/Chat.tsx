@@ -25,6 +25,7 @@ const Chat = (props:Props) => {
     },[chatMessages])
         useEffect(()=>{
         socket.emit("joinChat",chatId);
+
     },[])
 
     const sendMessage = ()=>{
@@ -37,18 +38,25 @@ const Chat = (props:Props) => {
         socket.emit("messageTo",{chatId, msg});
     }
         return (
-        <div>
+        <div className='container'>
             <h1>Chat with {user.displayName}</h1>
             <div className='chat'>
                 {chatMessages.map((chatMessage:any) => {
 
-                    return(<h1>{chatMessage.text} - {chatMessage.user}</h1>)
+                    return(
+                        <div className={chatMessage.user == myUser.displayName ? 'messageContainer myMessage':'messageContainer'}>
+                            <h3 className='userMessage'>{chatMessage.user}</h3>
+                            <h2 className='textMessage'>{chatMessage.text}</h2>   
+                        </div>
+                        )
                 })}
             </div>
-            <input type="text" placeholder='Message...' value={message} onChange={(e)=> setMessage(e.target.value)}/>
-            <button onClick={sendMessage}>SEND</button>
-            <button onClick={()=>setIsChatting(false)}>BACK</button>
-        </div>
+            <div className='chatControllers'>
+                <input type="text" placeholder='Message...' value={message} onChange={(e)=> setMessage(e.target.value)}/>
+                <button onClick={sendMessage}>SEND</button>
+                <button onClick={()=>setIsChatting(false)}>BACK</button>
+            </div>
+       </div>
     )
 }
 

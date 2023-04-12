@@ -22,7 +22,8 @@ const updateChat = async (chatId,msg) => {
     let messages = await client.get(chatId);
     if(!messages)
         messages = [];
-    messages = JSON.parse(messages);
+    else
+        messages = JSON.parse(messages);
 
     console.log("GET",messages);
     
@@ -35,4 +36,16 @@ const updateChat = async (chatId,msg) => {
     return messages;
 }
 
-module.exports = {updateParty, getUsers, setUsers, createChat, updateChat};
+const getChat = async (chatId) => {
+    let messages = await client.get(chatId);
+    if(!messages)
+        messages = [];
+    else
+        messages = JSON.parse(messages);
+
+    return messages;
+}
+
+
+
+module.exports = {updateParty, getUsers, setUsers, createChat, updateChat, getChat};

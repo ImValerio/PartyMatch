@@ -7,7 +7,7 @@ const morgan = require("morgan");
 
 const {connectToDb} = require("./db/connection")
 const {joinParty, removeSocketFromUser, getSocketIds} = require("./controller/socketController");
-const {updateChat, createChat} = require("./controller/dbController")
+const {updateChat, getChat} = require("./controller/dbController")
 
 const app = express();
 const server = http.createServer(app);
@@ -45,6 +45,7 @@ io.on('connection', (socket) => {
 
     }
  })
+ 
  socket.on("hiTo", async ({partyId, userId, user})=>{
   const socketIds = await getSocketIds(partyId,userId);
   for (const socketId of socketIds) {
@@ -55,7 +56,9 @@ io.on('connection', (socket) => {
  socket.on("joinChat", async (chatId)=> {
 
   socket.join(chatId)
-  await createChat(chatId);
+  const messages = await getChat(chatId);
+
+  io.to(socket.id).emit("updateChat", messages);
   
  })
 socket.on("messageTo", async ({chatId, msg})=> {
