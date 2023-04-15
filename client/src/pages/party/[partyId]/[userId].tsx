@@ -15,7 +15,7 @@ const Index = () => {
 
     const sayHi = (userId:string)=>{
         console.log(myUser)
-        socket.emit("hiTo",{partyId, userId, user:myUser});
+        socket.emit("hiTo",{ userId, user:myUser});
     }
 
     const recivedHi = (user:User)=>{
