@@ -37,17 +37,18 @@ io.on('connection', (socket) => {
   
   socket.on("join-party", async ({partyId, userId})=> {
     if(partyId && userId){
-      socket.join(partyId)
+      socket.join(partyId);
+      socket.join(userId);
       const users = await joinParty(partyId, socket, userId);
-      userIdSocket.set(socket.id,{userId: users[users.length -1].id, partyId});
+
       io.to(socket.id).emit("initUser", users[users.length -1]);
       io.to(partyId).emit("updateUsers", users);
 
     }
  })
  
- socket.on("hiTo", async ({partyId, userId, user})=>{
-  const socketIds = await getSocketIds(partyId,userId);
+ socket.on("hiTo", async ({ userId, user})=>{
+  const socketIds = await getSocketIds(userId,io);
   for (const socketId of socketIds) {
     io.to(socketId).emit("recivedHi", user);
   }

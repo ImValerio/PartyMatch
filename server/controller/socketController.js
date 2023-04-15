@@ -15,18 +15,9 @@ const joinParty = async (partyId, socket, userId)=>{
       if (!user){
          user = defaultUser;
          users = [...users, user];
-      }
-      else{
-         users.map((user)=>{
-            if(user.id == userId){
-               user.socketIds = [...user.socketIds,socket.id]
-            }
-            return user;
-         }) 
+         await updateParty(partyId, users);
       }
 
-      await updateParty(partyId, users);
-      console.log(users)
       return users;
    }catch(error){
       console.log(error)
@@ -52,13 +43,10 @@ const removeSocketFromUser = async (partyId, userId, socketId) => {
    await setUsers(partyId, users)
 }
 
-const getSocketIds = async (partyId,userId)=>{
+const getSocketIds = async (userId,io)=>{
+   const clients = io.sockets.adapter.rooms.get(userId);
 
-   const users =  await getUsers(partyId);
-
-   if(!users || users.length < 1) return []
-   const {socketIds} = users.find(user => user.id == userId);
-   return socketIds ? socketIds : [];
+   return clients ? Array.from(clients) : [];
 }
 
 module.exports = {joinParty, removeSocketFromUser, getSocketIds}

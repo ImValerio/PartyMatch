@@ -40,7 +40,7 @@ const Chat = (props:Props) => {
     }
         return (
         <div className='container'>
-            <h1>Chat with {user.displayName}</h1>
+            <h1 className='title-chat'>Chat with {user.displayName}</h1>
             <div className='chat'>
                 {chatMessages.map((chatMessage:any) => {
 
