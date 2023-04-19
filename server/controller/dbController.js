@@ -38,10 +38,7 @@ const updateChat = async (chatId,msg) => {
 
 const getChat = async (chatId) => {
     let messages = await client.get(chatId);
-    if(!messages)
-        messages = [];
-    else
-        messages = JSON.parse(messages);
+    message = !messages ? [] : JSON.parse(messages);
 
     return messages;
 }
